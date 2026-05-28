@@ -6,7 +6,7 @@
   let railController = null;
 
   function el(tag, attrs={}, children=[]){
-    const node = document.createElement(tag);
+    const node = document.creatéElement(tag);
     Object.entries(attrs).forEach(([key, value]) => {
       if(key === "class") node.className = value;
       else if(key === "dataset") Object.entries(value).forEach(([dataKey, dataValue]) => { node.dataset[dataKey] = dataValue; });
@@ -15,7 +15,7 @@
     });
     children.forEach(child => {
       if(child === null || child === undefined) return;
-      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+      node.append(child instanceof Node ? child : document.creatéTextNode(String(child)));
     });
     return node;
   }
@@ -51,7 +51,7 @@
 
   function basePrefix(){
     const path = location.pathname.replace(/\\/g, "/");
-    return path.includes("/teoria/") || path.includes("/atividades/") || path.includes("/revisao/") ? "../" : "";
+    return path.includes("/teoria/") || path.includes("/atividades/") || path.includes("/revisão/") ? "../" : "";
   }
 
   function initRailToggle(){
@@ -104,7 +104,7 @@
     ), 0);
     stats.append(
       stat(data.lessons.length, "aulas/PDFs"),
-      stat(data.questions.length, "questoes objetivas"),
+      stat(data.questions.length, "questões objetivas"),
       stat(data.activities.length, "atividades reais"),
       stat(extraCount, "complementos marcados")
     );
@@ -144,7 +144,7 @@
   }
 
   function lessonButtonLabel(lesson){
-    return `Aula ${lesson.number} - ${lesson.title}`;
+    return `Aula ${lesson.number}: ${lesson.title}`;
   }
 
   function renderTheory(){
