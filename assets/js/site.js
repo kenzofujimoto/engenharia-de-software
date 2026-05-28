@@ -20,9 +20,140 @@
     return node;
   }
 
+  function svgEl(tag, attrs={}, children=[]){
+    const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    children.forEach(child => {
+      if(child === null || child === undefined) return;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    });
+    return node;
+  }
+
+  function appendWrappedText(parent, text, x, y, width, lineHeight=17){
+    const words = String(text).split(" ");
+    const lines = [];
+    let current = "";
+    words.forEach(word => {
+      const next = current ? `${current} ${word}` : word;
+      if(next.length > Math.max(10, Math.floor(width / 7)) && current){
+        lines.push(current);
+        current = word;
+      } else {
+        current = next;
+      }
+    });
+    if(current) lines.push(current);
+    lines.forEach((line, index) => {
+      parent.append(svgEl("tspan", {x, y: y + index * lineHeight}, [line]));
+    });
+  }
+
+  function renderUseCaseDiagram(diagram){
+    const panel = el("div", {class:"diagram-box"});
+    panel.append(el("h4", {}, [diagram.title || "Diagrama de caso de uso desenhado"]));
+    if(diagram.note) panel.append(el("p", {class:"diagram-note"}, [diagram.note]));
+
+    const svg = svgEl("svg", {
+      class:"usecase-svg",
+      viewBox:"0 0 1000 620",
+      role:"img",
+      "aria-label": diagram.title || "Diagrama de caso de uso"
+    });
+
+    svg.append(svgEl("defs", {}, [
+      svgEl("marker", {
+        id:`arrow-${diagram.id}`,
+        viewBox:"0 0 10 10",
+        refX:"9",
+        refY:"5",
+        markerWidth:"7",
+        markerHeight:"7",
+        orient:"auto-start-reverse"
+      }, [svgEl("path", {d:"M 0 0 L 10 5 L 0 10 z", class:"diagram-arrow"})])
+    ]));
+
+    const boundary = diagram.boundary || {x:220, y:40, width:570, height:540};
+    svg.append(svgEl("rect", {
+      x:boundary.x,
+      y:boundary.y,
+      width:boundary.width,
+      height:boundary.height,
+      rx:"10",
+      class:"system-boundary"
+    }));
+    svg.append(svgEl("text", {x:boundary.x + 18, y:boundary.y + 28, class:"system-title"}, [diagram.system]));
+
+    const useCaseById = new Map();
+    diagram.useCases.forEach(useCase => {
+      useCaseById.set(useCase.id, useCase);
+      svg.append(svgEl("ellipse", {
+        cx:useCase.x,
+        cy:useCase.y,
+        rx:useCase.rx || 92,
+        ry:useCase.ry || 34,
+        class:"usecase-oval"
+      }));
+      const text = svgEl("text", {
+        x:useCase.x,
+        y:useCase.y - 6,
+        class:"usecase-label",
+        "text-anchor":"middle"
+      });
+      appendWrappedText(text, useCase.label, useCase.x, useCase.y - 6, (useCase.rx || 92) * 1.55, 15);
+      svg.append(text);
+    });
+
+    const actorById = new Map();
+    diagram.actors.forEach(actor => {
+      actorById.set(actor.id, actor);
+      const group = svgEl("g", {class:"actor-node"});
+      group.append(svgEl("circle", {cx:actor.x, cy:actor.y - 34, r:"15", class:"actor-stroke"}));
+      group.append(svgEl("line", {x1:actor.x, y1:actor.y - 19, x2:actor.x, y2:actor.y + 24, class:"actor-stroke"}));
+      group.append(svgEl("line", {x1:actor.x - 29, y1:actor.y - 3, x2:actor.x + 29, y2:actor.y - 3, class:"actor-stroke"}));
+      group.append(svgEl("line", {x1:actor.x, y1:actor.y + 24, x2:actor.x - 25, y2:actor.y + 62, class:"actor-stroke"}));
+      group.append(svgEl("line", {x1:actor.x, y1:actor.y + 24, x2:actor.x + 25, y2:actor.y + 62, class:"actor-stroke"}));
+      const label = svgEl("text", {x:actor.x, y:actor.y + 88, class:"actor-label", "text-anchor":"middle"});
+      appendWrappedText(label, actor.name, actor.x, actor.y + 88, 120, 15);
+      group.append(label);
+      svg.append(group);
+    });
+
+    diagram.links.forEach(link => {
+      const from = actorById.get(link.from) || useCaseById.get(link.from);
+      const to = useCaseById.get(link.to) || actorById.get(link.to);
+      if(!from || !to) return;
+      const fromX = actorById.has(link.from) ? from.x + (from.x < to.x ? 32 : -32) : from.x;
+      const fromY = actorById.has(link.from) ? from.y + 18 : from.y;
+      const toX = useCaseById.has(link.to) ? to.x + (fromX < to.x ? -(to.rx || 92) : (to.rx || 92)) : to.x;
+      const toY = to.y;
+      const className = link.type === "include" ? "diagram-link include-link" : "diagram-link";
+      svg.append(svgEl("line", {
+        x1:fromX,
+        y1:fromY,
+        x2:toX,
+        y2:toY,
+        class:className,
+        "marker-end": link.type === "include" ? `url(#arrow-${diagram.id})` : ""
+      }));
+      if(link.type){
+        const midX = (fromX + toX) / 2;
+        const midY = (fromY + toY) / 2 - 6;
+        svg.append(svgEl("text", {x:midX, y:midY, class:"link-label", "text-anchor":"middle"}, [`<<${link.type}>>`]));
+      }
+    });
+
+    panel.append(svg);
+    if(diagram.caption) panel.append(el("p", {class:"diagram-caption"}, [diagram.caption]));
+    return panel;
+  }
+
   function sourceTag(source){
     if(source === "course"){
       return el("span", {class:"source-tag base"}, ["Atividade real do curso"]);
+    }
+    if(source === "support"){
+      return el("span", {class:"source-tag base"}, ["Material de apoio enviado"]);
     }
     const isExtra = source === "extra";
     return el("span", {class:`source-tag ${isExtra ? "extra" : "base"}`}, [
@@ -38,6 +169,13 @@
     const node = el(ordered ? "ol" : "ul");
     items.forEach(item => node.append(el("li", {}, [item])));
     return node;
+  }
+
+  function appendTextBlock(parent, content){
+    const paragraphs = Array.isArray(content) ? content : [content];
+    paragraphs.filter(Boolean).forEach(paragraph => {
+      parent.append(el("p", {}, [paragraph]));
+    });
   }
 
   function lessonById(id){
@@ -184,7 +322,26 @@
         const block = el("article", {class:"content-card section-block"});
         block.append(sourceTag(section.source));
         block.append(el("h3", {}, [section.heading]));
-        block.append(el("p", {}, [section.body]));
+        appendTextBlock(block, section.body);
+        if(section.details && section.details.length){
+          block.append(list(section.details));
+        }
+        if(section.example || section.application){
+          const conceptGrid = el("div", {class:"concept-grid"});
+          if(section.example){
+            conceptGrid.append(el("div", {class:"concept-note"}, [
+              el("strong", {}, ["Exemplo"]),
+              el("p", {}, [section.example])
+            ]));
+          }
+          if(section.application){
+            conceptGrid.append(el("div", {class:"concept-note"}, [
+              el("strong", {}, ["Uso/aplicação"]),
+              el("p", {}, [section.application])
+            ]));
+          }
+          block.append(conceptGrid);
+        }
         content.append(block);
       });
     };
@@ -236,10 +393,14 @@
         deliverables.append(el("h4", {}, [activity.deliverableTitle || "Roteiro de estudo e entrega externa"]));
         deliverables.append(list(activity.deliverables));
         const evaluation = el("div", {class:"deliverable-box"});
-        evaluation.append(el("h4", {}, [activity.evaluationTitle || "Como saber se esta correto"]));
+        evaluation.append(el("h4", {}, [activity.evaluationTitle || "Como saber se está correto"]));
         evaluation.append(list(activity.evaluation));
         grid.append(tasks, deliverables);
         card.append(grid, evaluation);
+
+        if(activity.diagram) {
+          card.append(renderUseCaseDiagram(activity.diagram));
+        }
 
         const example = el("div", {class:"example-box"});
         example.append(el("h4", {}, [activity.exampleTitle]));

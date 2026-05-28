@@ -31,11 +31,11 @@ http://127.0.0.1:8080/index.html
 - Aula 1: fundamentos de Engenharia de Software
 - Aula 2: paradigmas, processos e desenvolvimento ágil
 - Aula 3: Engenharia de Requisitos
-- Aula 4: especificação, SRS, casos de uso e historias de usuário
+- Aula 4: especificação, SRS, casos de uso e histórias de usuário
 - Aula 5: modelagem com diagrama de casos de uso
 - Aula 6: projeto, arquitetura, implementação e implantação
-- Aula 7: qualidade, defeito, erro, falha, verificacao, validação e testes
-- Aula 8: evolução, sistemas legados e manutencao
+- Aula 7: qualidade, defeito, erro, falha, verificação, validação e testes
+- Aula 8: evolução, sistemas legados e manutenção
 
 ## Aviso sobre complementos
 
@@ -45,7 +45,7 @@ Alguns blocos aparecem marcados como:
 Complemento fora do material base
 ```
 
-Esses trechos não foram retirados diretamente dos PDFs. Eles foram adicionados como reforco de estudo quando o material da aula fica introdutório ou raso para prova pratica.
+Esses trechos não foram retirados diretamente dos PDFs. Eles foram adicionados como reforço de estudo quando o material da aula fica introdutório ou raso para prova prática.
 
 ## Estrutura
 

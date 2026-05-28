@@ -369,6 +369,28 @@ main{
   margin-top:16px;
 }
 .section-block p{color:#dce2da}
+.concept-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.concept-note{
+  min-width:0;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.045);
+  border-radius:8px;
+  padding:12px;
+}
+.concept-note strong{
+  display:block;
+  color:var(--amber);
+  margin-bottom:4px;
+}
+.concept-note p{
+  margin:0;
+  color:#e4e9e1;
+}
 .activity-list,.question-list-wrap{display:grid;gap:14px;min-width:0}
 .activity-card{padding:18px;min-width:0;max-width:100%;overflow-wrap:anywhere}
 .activity-head{
@@ -410,6 +432,68 @@ main{
   color:#eef5ef;
   font:500 .9rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;
 }
+.diagram-box{
+  margin-top:14px;
+  border:1px solid rgba(122,167,255,.28);
+  background:rgba(122,167,255,.07);
+  border-radius:8px;
+  padding:14px;
+  overflow:auto;
+}
+.diagram-note,.diagram-caption{
+  color:var(--muted);
+  font-size:.92rem;
+}
+.usecase-svg{
+  display:block;
+  min-width:760px;
+  width:100%;
+  height:auto;
+  margin-top:12px;
+}
+.system-boundary{
+  fill:rgba(18,17,15,.62);
+  stroke:rgba(244,244,239,.38);
+  stroke-width:2;
+}
+.system-title{
+  fill:#f4f4ef;
+  font-size:18px;
+  font-weight:800;
+}
+.usecase-oval{
+  fill:rgba(50,198,166,.14);
+  stroke:#32c6a6;
+  stroke-width:2;
+}
+.usecase-label,.actor-label,.link-label{
+  fill:#eef5ef;
+  font-size:14px;
+  font-weight:760;
+}
+.actor-stroke{
+  fill:none;
+  stroke:#f2b84b;
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.diagram-link{
+  stroke:rgba(244,244,239,.64);
+  stroke-width:2;
+}
+.include-link{
+  stroke:#7aa7ff;
+  stroke-dasharray:8 7;
+}
+.link-label{
+  fill:#cfe0ff;
+  paint-order:stroke;
+  stroke:#12110f;
+  stroke-width:5;
+  stroke-linejoin:round;
+}
+.diagram-arrow{fill:#7aa7ff}
 .review-toolbar{
   display:flex;
   align-items:center;
@@ -417,7 +501,7 @@ main{
   gap:16px;
   margin-bottom:16px;
 }
-.question-card{padding:16px}
+.question-card{padding:16px;min-width:0;max-width:100%;overflow-wrap:anywhere}
 .question-card h3{font-size:1.04rem;margin:8px 0 12px}
 .question-options{
   display:grid;
@@ -512,6 +596,7 @@ main{
   .section-shell.split,.activity-grid,.comparison-grid,.flashcard-grid,.lesson-meta{
     grid-template-columns:1fr;
   }
+  .concept-grid{grid-template-columns:1fr}
 }
 @media (max-width:640px){
   .topbar{align-items:flex-start;flex-direction:column}
