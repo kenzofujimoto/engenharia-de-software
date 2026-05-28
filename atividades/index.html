@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="../assets/css/site.css?v=4" />
+  <title>Atividades - Engenharia de Software N2</title>
+</head>
+<body data-view="activities">
+  <header class="topbar">
+    <a class="brand" href="../index.html">EngSoft N2</a>
+    <nav class="main-nav" aria-label="Navegacao principal">
+      <a href="../index.html">Home</a>
+      <a href="../teoria/index.html">Teoria</a>
+      <a class="active" href="index.html">Atividades</a>
+      <a href="../revisao/index.html">Revisao</a>
+    </nav>
+  </header>
+
+  <main class="app-layout" data-sidebar-layout>
+    <aside id="activityRail" class="rail">
+      <div class="rail-head">
+        <h1 class="rail-title">Atividades</h1>
+        <button class="rail-toggle" type="button" data-sidebar-toggle aria-controls="activityRail" aria-expanded="true" title="Recolher menu">
+          <span class="rail-toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Alternar menu lateral</span>
+        </button>
+      </div>
+      <div class="rail-content">
+        <p>Atividades reais do curso, adaptadas para estudo individual.</p>
+        <div id="activityFilters" class="tab-list"></div>
+      </div>
+    </aside>
+    <section class="content-stage">
+      <div class="content-card intro-card">
+        <span class="source-tag extra">Aviso de uso do site</span>
+        <h2>Atividades reais do curso</h2>
+        <p>Esta pagina serve para estudo conduzido no seu ritmo. Quando uma atividade pedir arquivo Word, PDF ou postagem no AVA, o site mostra um roteiro e um exemplo correto, mas nao substitui a entrega oficial.</p>
+      </div>
+      <div id="activityList" class="activity-list"></div>
+    </section>
+  </main>
+
+  <script src="../assets/js/site-data.js?v=4"></script>
+  <script src="../assets/js/site.js?v=4"></script>
+</body>
+</html>

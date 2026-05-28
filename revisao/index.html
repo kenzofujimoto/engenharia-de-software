@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="../assets/css/site.css?v=4" />
+  <title>Revisao - Engenharia de Software N2</title>
+</head>
+<body data-view="review">
+  <header class="topbar">
+    <a class="brand" href="../index.html">EngSoft N2</a>
+    <nav class="main-nav" aria-label="Navegacao principal">
+      <a href="../index.html">Home</a>
+      <a href="../teoria/index.html">Teoria</a>
+      <a href="../atividades/index.html">Atividades</a>
+      <a class="active" href="index.html">Revisao</a>
+    </nav>
+  </header>
+
+  <main class="app-layout" data-sidebar-layout>
+    <aside id="reviewRail" class="rail">
+      <div class="rail-head">
+        <h1 class="rail-title">Revisao</h1>
+        <button class="rail-toggle" type="button" data-sidebar-toggle aria-controls="reviewRail" aria-expanded="true" title="Recolher menu">
+          <span class="rail-toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Alternar menu lateral</span>
+        </button>
+      </div>
+      <div class="rail-content">
+        <p>Questões objetivas, flashcards e comparações.</p>
+        <div id="reviewFilters" class="tab-list"></div>
+      </div>
+    </aside>
+    <section class="content-stage">
+      <div class="review-toolbar">
+        <div>
+          <h2>Banco de questoes</h2>
+          <p>Escolha uma aula no menu ou responda tudo em sequencia.</p>
+        </div>
+        <button id="resetAnswers" class="button quiet" type="button">Limpar respostas</button>
+      </div>
+      <div id="questionList" class="question-list-wrap"></div>
+      <section class="section-shell no-x-padding">
+        <div class="section-heading compact-heading">
+          <h2>Comparacoes-chave</h2>
+          <p>Use para respostas discursivas curtas.</p>
+        </div>
+        <div id="comparisonGrid" class="comparison-grid"></div>
+      </section>
+      <section class="section-shell no-x-padding">
+        <div class="section-heading compact-heading">
+          <h2>Flashcards</h2>
+          <p>Clique para revelar a resposta.</p>
+        </div>
+        <div id="flashcardGrid" class="flashcard-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="../assets/js/site-data.js?v=4"></script>
+  <script src="../assets/js/site.js?v=4"></script>
+</body>
+</html>
