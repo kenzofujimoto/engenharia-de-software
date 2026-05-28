@@ -6,7 +6,7 @@
   let railController = null;
 
   function el(tag, attrs={}, children=[]){
-    const node = document.creatéElement(tag);
+    const node = document.createElement(tag);
     Object.entries(attrs).forEach(([key, value]) => {
       if(key === "class") node.className = value;
       else if(key === "dataset") Object.entries(value).forEach(([dataKey, dataValue]) => { node.dataset[dataKey] = dataValue; });
@@ -15,7 +15,7 @@
     });
     children.forEach(child => {
       if(child === null || child === undefined) return;
-      node.append(child instanceof Node ? child : document.creatéTextNode(String(child)));
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
     });
     return node;
   }
@@ -51,7 +51,7 @@
 
   function basePrefix(){
     const path = location.pathname.replace(/\\/g, "/");
-    return path.includes("/teoria/") || path.includes("/atividades/") || path.includes("/revisão/") ? "../" : "";
+    return path.includes("/teoria/") || path.includes("/atividades/") || path.includes("/revisao/") ? "../" : "";
   }
 
   function initRailToggle(){

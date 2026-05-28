@@ -6,7 +6,7 @@ O projeto foi montado para revisão de prova: resumos por aula, pontos que costu
 
 ## Como visualizar
 
-Não precisa de build nem instalacao de dependencias.
+Não precisa de build nem instalação de dependências.
 
 Abra direto no navegador:
 
@@ -26,7 +26,7 @@ Depois acesse:
 http://127.0.0.1:8080/index.html
 ```
 
-## Conteudo
+## Conteúdo
 
 - Aula 1: fundamentos de Engenharia de Software
 - Aula 2: paradigmas, processos e desenvolvimento ágil
@@ -55,17 +55,18 @@ Esses trechos não foram retirados diretamente dos PDFs. Eles foram adicionados 
 +-- index.html
 +-- teoria/
 +-- atividades/
-+-- revisão/
++-- revisao/
 +-- assets/
 +-- vercel.json
 ```
 
 ## Deploy na Vercel
 
-O projeto esta configurado para deploy estatico.
+O projeto está configurado para deploy estático.
 
-Na Vercel, use:
+Na Vercel:
 
 - Framework Preset: `Other`
 - Build Command: vazio
 - Output Directory: vazio ou raiz do projeto
+- Root Directory: a raiz deste repositório
