@@ -326,6 +326,9 @@
         if(section.details && section.details.length){
           block.append(list(section.details));
         }
+        if(section.diagram){
+          block.append(renderUseCaseDiagram(section.diagram));
+        }
         if(section.example || section.application){
           const conceptGrid = el("div", {class:"concept-grid"});
           if(section.example){

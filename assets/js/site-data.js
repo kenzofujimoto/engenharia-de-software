@@ -2382,12 +2382,95 @@ window.ENG_SOFT_DATA = {
     }
   };
 
+  const theoryDiagrams = {
+    "aula-4|UML e casos de uso": {
+      id: "theory-uml-matricula",
+      title: "Exemplo UML desenhado: casos de uso de matrícula",
+      system: "Sistema de Matrícula Online",
+      note: "Este é um exemplo visual de UML de caso de uso: ator fora da fronteira, funcionalidades dentro do sistema e associações mostrando interação.",
+      caption: "O diagrama não mostra banco de dados, tela ou algoritmo; ele mostra objetivos funcionais vistos pelo ator externo.",
+      actors: [
+        {id:"aluno", name:"Aluno", x:95, y:285},
+        {id:"emailService", name:"Serviço de E-mail", x:900, y:285}
+      ],
+      useCases: [
+        {id:"login", label:"Fazer login", x:360, y:130},
+        {id:"catalogo", label:"Consultar catálogo", x:610, y:130},
+        {id:"carrinho", label:"Montar carrinho de matrícula", x:475, y:255, rx:122},
+        {id:"confirmar", label:"Confirmar matrícula", x:475, y:385, rx:108},
+        {id:"validar", label:"Validar vagas e pré-requisitos", x:670, y:455, rx:125},
+        {id:"comprovante", label:"Enviar comprovante", x:700, y:300, rx:100}
+      ],
+      links: [
+        {from:"aluno", to:"login"},
+        {from:"aluno", to:"catalogo"},
+        {from:"aluno", to:"carrinho"},
+        {from:"aluno", to:"confirmar"},
+        {from:"confirmar", to:"validar", type:"include"},
+        {from:"confirmar", to:"comprovante", type:"include"},
+        {from:"emailService", to:"comprovante"}
+      ]
+    },
+    "aula-5|Diagrama de casos de uso": {
+      id: "theory-usecase-estacionamento",
+      title: "Exemplo UML desenhado: casos de uso de estacionamento",
+      system: "Sistema de Estacionamento",
+      note: "Exemplo visual do conceito da Aula 5 aplicado ao estacionamento: atores externos, fronteira do sistema e objetivos principais.",
+      caption: "Casos de uso foram nomeados com verbos porque representam objetivos do ator, não telas isoladas.",
+      actors: [
+        {id:"cliente", name:"Cliente", x:95, y:250},
+        {id:"operador", name:"Operador", x:95, y:445},
+        {id:"admin", name:"Administrador", x:900, y:330}
+      ],
+      useCases: [
+        {id:"ticket", label:"Retirar ticket", x:355, y:130},
+        {id:"pagar", label:"Pagar estacionamento", x:355, y:275, rx:110},
+        {id:"sair", label:"Liberar saída do veículo", x:355, y:420, rx:115},
+        {id:"auxiliar", label:"Auxiliar cliente", x:610, y:455},
+        {id:"relatorio", label:"Consultar relatório diário", x:690, y:190, rx:118},
+        {id:"configurar", label:"Configurar tarifa e tolerância", x:700, y:315, rx:122}
+      ],
+      links: [
+        {from:"cliente", to:"ticket"},
+        {from:"cliente", to:"pagar"},
+        {from:"cliente", to:"sair"},
+        {from:"operador", to:"auxiliar"},
+        {from:"admin", to:"relatorio"},
+        {from:"admin", to:"configurar"}
+      ]
+    },
+    "aula-5|Fronteira do sistema": {
+      id: "theory-boundary",
+      title: "Exemplo UML desenhado: fronteira do sistema",
+      system: "Sistema de Estacionamento",
+      note: "A fronteira deixa claro o que pertence ao software modelado. Atores ficam fora; casos de uso ficam dentro.",
+      caption: "Se a operadora de cartão for externa ao software, ela deve aparecer como ator externo, não dentro da fronteira.",
+      actors: [
+        {id:"cliente", name:"Cliente", x:90, y:300},
+        {id:"cartao", name:"Operadora de Cartão", x:900, y:300}
+      ],
+      useCases: [
+        {id:"pagar", label:"Pagar estacionamento", x:410, y:260, rx:112},
+        {id:"autorizar", label:"Autorizar pagamento com cartão", x:650, y:260, rx:132},
+        {id:"recibo", label:"Registrar pagamento", x:530, y:390, rx:105}
+      ],
+      links: [
+        {from:"cliente", to:"pagar"},
+        {from:"pagar", to:"autorizar", type:"include"},
+        {from:"pagar", to:"recibo", type:"include"},
+        {from:"cartao", to:"autorizar"}
+      ]
+    }
+  };
+
   window.ENG_SOFT_DATA.lessons.forEach(lesson => {
     lesson.sections.forEach(section => {
       const details = deepTheory[`${lesson.id}|${section.heading}`];
       if(details) Object.assign(section, details);
       const practice = conceptPractice[`${lesson.id}|${section.heading}`];
       if(practice) Object.assign(section, practice);
+      const diagram = theoryDiagrams[`${lesson.id}|${section.heading}`];
+      if(diagram) section.diagram = diagram;
     });
   });
 })();
