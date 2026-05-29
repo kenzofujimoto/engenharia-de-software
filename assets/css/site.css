@@ -391,6 +391,39 @@ main{
   margin:0;
   color:#e4e9e1;
 }
+.data-table-wrap{
+  margin-top:14px;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+}
+.data-table{
+  width:100%;
+  min-width:760px;
+  border-collapse:collapse;
+}
+.data-table th,.data-table td{
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  vertical-align:top;
+  text-align:left;
+}
+.data-table th{
+  color:#101714;
+  background:var(--teal);
+  font-size:.88rem;
+  font-weight:850;
+}
+.data-table td{
+  color:#e3e8e0;
+  font-size:.93rem;
+}
+.data-table tr:last-child td{border-bottom:0}
+.data-table td:first-child{
+  color:var(--amber);
+  font-weight:850;
+}
 .activity-list,.question-list-wrap{display:grid;gap:14px;min-width:0}
 .activity-card{padding:18px;min-width:0;max-width:100%;overflow-wrap:anywhere}
 .activity-head{

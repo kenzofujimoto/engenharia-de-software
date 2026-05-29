@@ -178,6 +178,24 @@
     });
   }
 
+  function renderDataTable(table){
+    const wrapper = el("div", {class:"data-table-wrap"});
+    const tableNode = el("table", {class:"data-table"});
+    const thead = el("thead");
+    const headRow = el("tr");
+    table.columns.forEach(column => headRow.append(el("th", {}, [column])));
+    thead.append(headRow);
+    const tbody = el("tbody");
+    table.rows.forEach(row => {
+      const tableRow = el("tr");
+      row.forEach(cell => tableRow.append(el("td", {}, [cell])));
+      tbody.append(tableRow);
+    });
+    tableNode.append(thead, tbody);
+    wrapper.append(tableNode);
+    return wrapper;
+  }
+
   function lessonById(id){
     return data.lessons.find(lesson => lesson.id === id);
   }
@@ -325,6 +343,9 @@
         appendTextBlock(block, section.body);
         if(section.details && section.details.length){
           block.append(list(section.details));
+        }
+        if(section.table){
+          block.append(renderDataTable(section.table));
         }
         if(section.diagram){
           block.append(renderUseCaseDiagram(section.diagram));

@@ -2116,7 +2116,40 @@ window.ENG_SOFT_DATA = {
         "Adaptativa: ajustar sistema a nova lei ou API externa.",
         "Perfectiva: melhorar relatório ou adicionar filtro solicitado.",
         "Preventiva: refatorar módulo para reduzir risco de falhas futuras."
-      ]
+      ],
+      table: {
+        columns: ["Tipo", "O que significa", "Quando acontece", "Objetivo principal", "Exemplo prático"],
+        rows: [
+          [
+            "Corretiva",
+            "Corrige defeitos, falhas ou comportamentos incorretos identificados depois que o software já existe ou já está em uso.",
+            "Quando usuário, teste, monitoramento ou suporte encontra algo que deveria funcionar, mas não funciona conforme o esperado.",
+            "Restaurar o comportamento correto e reduzir impacto do erro no usuário ou no negócio.",
+            "O sistema de estacionamento calcula R$ 10,00 para permanência de 1h10, mas a regra é R$ 5,00 por hora ou fração. A manutenção corretiva ajusta a fórmula de cobrança."
+          ],
+          [
+            "Adaptativa",
+            "Adapta o software a mudanças externas ao sistema, como nova lei, novo navegador, nova API, novo sistema operacional ou alteração em serviço integrado.",
+            "Quando o ambiente ao redor muda, mesmo que o software antigo não estivesse exatamente errado.",
+            "Manter o sistema compatível e funcionando em um novo contexto técnico, legal ou operacional.",
+            "A operadora de cartão muda a API de pagamento. O sistema de estacionamento precisa atualizar a integração para continuar registrando pagamentos com cartão."
+          ],
+          [
+            "Perfectiva",
+            "Melhora uma funcionalidade existente ou adiciona aprimoramentos de valor, desempenho, usabilidade ou experiência, sem partir necessariamente de um defeito.",
+            "Quando usuários pedem melhoria, o negócio quer ganhar eficiência ou a equipe identifica forma melhor de executar uma tarefa.",
+            "Aumentar valor, produtividade, clareza, desempenho ou satisfação do usuário.",
+            "O administrador já consulta relatório diário, mas pede filtro por período e exportação em PDF. A manutenção perfectiva melhora uma funcionalidade existente."
+          ],
+          [
+            "Preventiva",
+            "Modifica a estrutura interna para reduzir risco futuro, facilitar evolução, melhorar manutenção ou evitar defeitos antes que apareçam.",
+            "Quando o sistema funciona, mas o código, arquitetura, testes ou organização indicam risco de ficar caro ou perigoso alterar depois.",
+            "Diminuir dívida técnica, reduzir chance de falhas futuras e tornar próximas mudanças mais seguras.",
+            "A regra de tarifa está duplicada em várias telas. A manutenção preventiva centraliza essa regra em um único módulo e adiciona testes para evitar erros em mudanças futuras."
+          ]
+        ]
+      }
     },
     "aula-8|Complemento: dívida técnica": {
       body: [
