@@ -1,75 +1,113 @@
 # Quarto Inteligente — Hack Inova Health AI 2026
 
-PoC do **Desafio 7 — Quarto Inteligente**, focada em gestão e operação hospitalar.
+PoC do **Desafio 7 — Quarto Inteligente**, para gestão e operação hospitalar. Esta versão usa como fonte de verdade os casos sintéticos do pacote oficial `health-ai-starter` e implementa toda a microjornada que independe da Oracle.
 
-## Problema
-Quartos vazios podem manter iluminação e climatização ligadas; ao mesmo tempo, sensores sem contexto podem criar ruído operacional. A PoC demonstra uma camada simples de decisão que cruza presença, estado do sensor e cargas monitoradas antes de abrir uma ocorrência.
+## O que está implementado
 
-## Microjornada
-**Entrada → decisão → ação → saída → exceção**
-1. Entrada: evento sintético de um quarto.
-2. Decisão: API avalia presença, saúde do sensor, HVAC, iluminação e consumo observado.
-3. Ação: retorna `OK`, `ALERT` ou `REVIEW` com regra e explicação.
-4. Saída: operador confirma utilidade/revisão ou marca falso alerta.
-5. Exceção: sensor indisponível ou contexto insuficiente sempre vai para revisão humana.
+- Dataset oficial `data/eventos_sensor_mock.json` com `DEMO-201`, `DEMO-202` e `DEMO-203`.
+- API `POST /api/evaluate` com motor de decisão explicável.
+- Regra temporal de desperdício: **quarto vazio por 120 minutos + ar ligado → ALERT**.
+- Quarto ocupado + ar ligado → `OK`, sem ação automática.
+- Presença sem leitura/sensor indisponível → `REVIEW`.
+- Dado temporal ausente → `REVIEW`, evitando inferência insegura.
+- Serviço da API indisponível → estado seguro de revisão; não há decisão energética silenciosa no cliente.
+- Confirmação humana validada por `POST /api/confirm`.
+- Métricas calculadas por `POST /api/metrics`: alertas úteis, falsos alertas, pendências e tempo médio até confirmação.
+- Estado da demonstração persistido no `localStorage`, para sobreviver a refresh durante a apresentação.
+- Exportação da evidência da sessão em JSON.
+- Linha do tempo com evento, decisão e confirmação humana.
+- Gerador manual compatível com o contrato do starter.
+- Testes automatizados para sucesso, limiar temporal, dado ausente, falha de sensor, escopo sintético, rejeição humana e métricas.
 
-## Cena obrigatória da demonstração
-| Cena | Resultado esperado |
-|---|---|
-| Quarto vazio + ar ligado | `ALERT` |
-| Quarto ocupado | `OK` |
-| Sensor indisponível | `REVIEW` |
+## Fonte oficial do desafio
 
-O botão **Executar roteiro da demo** gera as três cenas na sequência.
+O starter define para o Desafio 7:
 
-## Contrato de evento
+- **Dor:** quartos vazios com luz/ar ligados geram desperdício; sensores sem contexto geram alertas inúteis.
+- **Construir:** painel com eventos simulados, presença + consumo, alertas acionáveis e confirmação humana.
+- **Demo:** vazio + ar ligado → alerta; ocupado → sem ação; sensor indisponível → revisão manual.
+- **Métricas:** alertas úteis, falsos alertas e tempo até confirmação.
+- **Limite:** não controlar equipamentos reais nem alterar ambiente de paciente.
+
+O cenário oficial adiciona o detalhe temporal: **vazio por 120 minutos com ar ligado**.
+
+## Contrato v2
+
+Entrada principal, compatível com o starter:
+
 ```json
-{"room_id":"Q-204","occurred_at":"2026-09-12T12:00:00.000Z","sensor_status":"online","occupied":false,"hvac_on":true,"light_on":false,"power_w":1260,"synthetic":true}
-```
-`POST /api/evaluate` retorna classificação, severidade, `rule_id`, justificativa, ação recomendada, evidências e se exige confirmação humana.
-
-## Regras da PoC
-- `sensor_status != online` ou presença desconhecida → `REVIEW`.
-- quarto vazio + HVAC ligado → `ALERT`.
-- quarto vazio + iluminação ligada → `ALERT`.
-- quarto ocupado → `OK` para estas regras de desperdício.
-- `synthetic != true` → `REVIEW`, pois dados reais estão fora do escopo da PoC.
-
-## Métricas
-O dashboard mede apenas a sessão de demonstração: alertas úteis confirmados, falsos alertas, tempo médio até confirmação e ocorrências abertas. Não há alegação de economia financeira, validação com pacientes ou aprovação institucional.
-
-## Limites de segurança
-- Não controla equipamentos reais.
-- Não envia comando para HVAC, iluminação, BMS ou dispositivo clínico.
-- Não coleta nome, prontuário ou dado clínico.
-- Dados são sintéticos.
-- Exceções e incerteza são encaminhadas para uma pessoa.
-- Em ambiente real, regras devem respeitar requisitos de ventilação, pressão, temperatura, umidade, infecção e políticas locais.
-
-## Arquitetura
-```text
-Gerador de eventos (browser)
-          |
-          v
-POST /api/evaluate  ---> motor de regras explicável
-          |                  |
-          v                  v
-     decisão JSON       rule_id + evidências
-          |
-          v
-Dashboard ---> fila humana ---> confirmação ---> métricas da sessão
+{
+  "room_id": "DEMO-201",
+  "timestamp": "2026-09-12T11:00:00-03:00",
+  "presence": false,
+  "sensor_status": "online",
+  "ac_on": true,
+  "light_on": false,
+  "empty_minutes": 120,
+  "power_w": null,
+  "synthetic": true
+}
 ```
 
-### Mapeamento futuro para OCI
-A PoC não depende de OCI. Uma evolução natural seria Compute/Functions/API Gateway para ingestão, Autonomous Database para eventos e confirmações, APEX ou o dashboard atual para operação, Logging/Monitoring para observabilidade e fila/stream para desacoplar sensores. Isso é desenho de evolução, não integração pronta.
+`light_on`, `sensor_status` e `power_w` são extensões da PoC. O motor ainda aceita os aliases antigos `occupied`, `hvac_on` e `occurred_at` para compatibilidade.
+
+## Regras
+
+| Regra | Condição | Resultado |
+|---|---|---|
+| `ENERGY-AC-120` | vazio ≥120 min + AC ligado | `ALERT` |
+| `ENERGY-LIGHT-120` | vazio ≥120 min + luz ligada | `ALERT` |
+| `CTX-WAIT-120` | vazio <120 min + carga ligada | `OK / MONITOR` |
+| `SENSOR-001` | presença sem leitura ou sensor não online | `REVIEW` |
+| `DATA-EMPTY-001` | vazio sem duração conhecida | `REVIEW` |
+| `DATA-TIME-001` | timestamp ausente/inválido | `REVIEW` |
+| `SERVICE-001` | API de decisão indisponível na demo | `REVIEW` no cliente |
+| `SCOPE-001` | dado não sintético | `REVIEW` |
+
+## Persistência sem Oracle
+
+Não há banco central nesta etapa. Para a demo, decisões e confirmações ficam no `localStorage` do navegador e podem ser exportadas em JSON. Isso é **persistência de demonstração**, não arquitetura de produção.
+
+A fronteira para banco está deliberadamente isolada: quando a OCI for configurada, eventos, decisões e confirmações devem ser persistidos no banco Oracle e os mesmos contratos de API podem ser mantidos. Nenhuma alegação de persistência hospitalar é feita hoje.
+
+## APIs
+
+- `GET /api/health` — estado da PoC e modo de persistência.
+- `POST /api/evaluate` — recebe evento e retorna decisão + regra + evidências.
+- `POST /api/confirm` — valida e retorna o registro de confirmação humana.
+- `POST /api/metrics` — calcula métricas a partir da sessão.
+
+## Demo recomendada
+
+1. Clique **Executar demo oficial**.
+2. Mostre `DEMO-201`: vazio 120 min + AC → `ENERGY-AC-120` → alerta.
+3. Confirme como útil **ou rejeite** e mostre a métrica/timeline.
+4. Mostre `DEMO-202`: ocupado + AC → sem ação.
+5. Mostre `DEMO-203`: presença sem leitura → revisão manual.
+6. Rode **Dado ausente** para provar comportamento seguro com contexto incompleto.
+7. Rode **API indisponível** para provar fail-safe.
+8. Exporte a sessão JSON como evidência de rastreabilidade.
+
+## Limites
+
+- Somente dados sintéticos.
+- Sem nome, prontuário ou dado clínico.
+- Não controla HVAC, iluminação, BMS ou equipamento clínico.
+- Métricas valem apenas para a sessão simulada.
+- Não há validação com pacientes nem aprovação institucional.
+- Banco/OCI ainda não configurados.
 
 ## Testes
-`npm test` cobre as três cenas do desafio e a trava de dados sintéticos.
 
-## Pesquisa, crítica e pitch
+```bash
+npm test
+```
+
+Os testes cobrem os três casos oficiais, limiar de 119/120 minutos, dados ausentes, trava de escopo, rejeição humana e cálculo de métricas.
+
+## Documentação
+
+- `docs/ARQUITETURA-SEM-ORACLE.md`
 - `docs/PESQUISA-E-HIPOTESES.md`
 - `docs/CRITICA-ADVERSARIAL.md`
 - `docs/PITCH.md`
-
-## Trabalho em equipe
-Pessoa 1: demo/dashboard e narrativa. Pessoa 2: regras/API e testes. Pessoa 3: pesquisa/evidências e pitch. Uma pessoa integra a branch de demo; use branches/worktrees separadas para trabalho paralelo.
