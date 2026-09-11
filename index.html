@@ -2,76 +2,60 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="data:," />
-  <link rel="stylesheet" href="assets/css/site.css?v=11" />
-  <title>Engenharia de Software N2</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="PoC Quarto Inteligente — alertas operacionais com contexto e confirmação humana." />
+  <title>Quarto Inteligente — Operação hospitalar+</title>
+  <link rel="stylesheet" href="/hackinova.css" />
 </head>
-<body data-view="home">
+<body>
+  <div class="scope-strip">POC • DADOS SINTÉTICOS • NÃO CONTROLA EQUIPAMENTOS • SEM DADOS DE PACIENTES</div>
   <header class="topbar">
-    <a class="brand" href="index.html">EngSoft N2</a>
-    <nav class="main-nav" aria-label="Navegação principal">
-      <a class="active" href="index.html">Home</a>
-      <a href="teoria/index.html">Teoria</a>
-      <a href="atividades/index.html">Atividades</a>
-      <a href="revisao/index.html">Revisão</a>
-    </nav>
+    <div><div class="eyebrow">Hack Inova Health AI · Desafio 7</div><h1>Quarto Inteligente</h1><p class="subtitle">Contexto antes do alerta. Pessoa antes da ação.</p></div>
+    <div class="system-pill" id="systemPill"><span></span> verificando API</div>
   </header>
-
-  <main>
-    <section class="study-hero">
-      <div class="hero-copy">
-        <h1>Engenharia de Software N2</h1>
-        <p>Guia de estudo baseado nos textos de apoio das aulas, com revisão por assunto, questões objetivas e modelos de entrega para atividades práticas.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="teoria/index.html">Estudar teoria</a>
-          <a class="button" href="revisao/index.html">Responder questões</a>
-          <a class="button quiet" href="atividades/index.html">Ver atividades</a>
-        </div>
+  <main class="shell">
+    <section class="hero-grid">
+      <article class="hero-copy panel">
+        <div class="eyebrow">Operação hospitalar+</div><h2>Transforme telemetria em uma fila de trabalho explicável.</h2>
+        <p>O painel cruza presença, estado do sensor e cargas monitoradas. Ele só cria uma ocorrência quando existe contexto suficiente e sempre exige confirmação humana antes de qualquer encaminhamento operacional.</p>
+        <div class="hero-actions"><button class="btn primary" id="runDemo">Executar roteiro da demo</button><button class="btn ghost" id="resetDemo">Limpar sessão</button></div>
+      </article>
+      <article class="journey panel">
+        <div class="journey-step"><b>1</b><span><strong>Entrada</strong>Evento sintético do quarto</span></div><div class="journey-arrow">→</div>
+        <div class="journey-step"><b>2</b><span><strong>Decisão</strong>Presença + carga + saúde do sensor</span></div><div class="journey-arrow">→</div>
+        <div class="journey-step"><b>3</b><span><strong>Ação</strong>OK, alerta ou revisão</span></div><div class="journey-arrow">→</div>
+        <div class="journey-step"><b>4</b><span><strong>Saída</strong>Confirmação humana + métrica</span></div>
+      </article>
+    </section>
+    <section class="metrics" aria-label="Métricas da sessão">
+      <article class="metric"><span>Ocorrências abertas</span><strong id="mOpen">0</strong><small>ALERT + REVIEW pendentes</small></article>
+      <article class="metric"><span>Alertas úteis</span><strong id="mUseful">0</strong><small>confirmados pela operação</small></article>
+      <article class="metric"><span>Falsos alertas</span><strong id="mFalse">0</strong><small>marcados nesta sessão</small></article>
+      <article class="metric"><span>Tempo até confirmação</span><strong id="mTime">—</strong><small>média da sessão</small></article>
+    </section>
+    <section class="workspace">
+      <div class="column-main">
+        <div class="section-head"><div><div class="eyebrow">Situação agora</div><h2>Quartos monitorados</h2></div><div class="legend"><span class="dot ok"></span>normal <span class="dot alert"></span>alerta <span class="dot review"></span>revisão</div></div>
+        <div class="room-grid" id="roomGrid"></div>
+        <div class="section-head timeline-head"><div><div class="eyebrow">Rastreabilidade</div><h2>Linha do tempo</h2></div></div>
+        <div class="timeline panel" id="timeline"><div class="empty">Nenhum evento nesta sessão.</div></div>
       </div>
-      <aside class="dashboard-panel" aria-label="Resumo do guia">
-        <div id="homeStats" class="stat-grid"></div>
-        <div class="process-strip" aria-label="Fluxo do processo de software">
-          <span>Especificação</span>
-          <span>Projeto</span>
-          <span>Implementação</span>
-          <span>Validação</span>
-          <span>Evolução</span>
-        </div>
+      <aside class="column-side">
+        <section class="panel queue-panel"><div class="section-head compact"><div><div class="eyebrow">Fila operacional</div><h2>Precisa de pessoa</h2></div><span class="counter" id="queueCount">0</span></div><div id="alertQueue" class="queue"><div class="empty">Sem pendências.</div></div></section>
+        <section class="panel generator">
+          <div class="eyebrow">Gerador de eventos</div><h2>Simular uma leitura</h2>
+          <form id="eventForm">
+            <label>Quarto<input name="room_id" value="Q-207" maxlength="12" /></label>
+            <div class="form-row"><label>Presença<select name="occupied"><option value="false">Vazio</option><option value="true">Ocupado</option><option value="null">Desconhecida</option></select></label><label>Sensor<select name="sensor_status"><option value="online">Online</option><option value="offline">Indisponível</option><option value="degraded">Degradado</option></select></label></div>
+            <div class="checks"><label><input type="checkbox" name="hvac_on" /> Ar ligado</label><label><input type="checkbox" name="light_on" /> Luz ligada</label></div>
+            <label>Consumo observado (W)<input type="number" name="power_w" min="0" value="80" /></label>
+            <button class="btn primary full" type="submit">Enviar evento sintético</button>
+          </form><p class="form-note">O simulador não possui campos de nome, prontuário ou dado clínico.</p>
+        </section>
       </aside>
     </section>
-
-    <section class="section-shell">
-      <div class="section-heading">
-        <h2>Roteiro por aula</h2>
-        <p>Entre direto no tópico da prova. Cada aula separa material base, complementos e pegadinhas.</p>
-      </div>
-      <div id="homeLessonGrid" class="lesson-grid"></div>
-    </section>
-
-    <section class="section-shell split">
-      <div>
-        <div class="section-heading compact-heading">
-          <h2>Onde o material fica raso</h2>
-          <p>Esses pontos receberam complementos marcados explicitamente no site.</p>
-        </div>
-        <div id="homeShallowList" class="issue-list"></div>
-      </div>
-      <div>
-        <div class="section-heading compact-heading">
-          <h2>Revisão rápida</h2>
-          <p>Comparações que costumam aparecer em questões discursivas e objetivas.</p>
-        </div>
-        <div id="homeComparisonList" class="comparison-mini"></div>
-      </div>
-    </section>
   </main>
-
-  <footer class="footer">
-    <span>Baseado nos PDFs enviados. Complementos extras aparecem identificados.</span>
-  </footer>
-
-  <script src="assets/js/site-data.js?v=11"></script>
-  <script src="assets/js/site.js?v=11"></script>
+  <footer><span>Hack Inova Health AI 2026 · PoC para gestão e operação</span><span>Regra de segurança: exceção ou contexto incompleto → pessoa.</span></footer>
+  <script src="/hackinova.js" defer></script>
 </body>
 </html>
