@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "source": "Health AI starter oficial - data/eventos_sensor_mock.json",
+  "events": [
+    {
+      "room_id": "DEMO-201",
+      "timestamp": "2026-09-12T11:00:00-03:00",
+      "presence": false,
+      "ac_on": true,
+      "empty_minutes": 120,
+      "expected": "revisar_desperdicio"
+    },
+    {
+      "room_id": "DEMO-202",
+      "timestamp": "2026-09-12T11:00:00-03:00",
+      "presence": true,
+      "ac_on": true,
+      "empty_minutes": 0,
+      "expected": "sem_acao"
+    },
+    {
+      "room_id": "DEMO-203",
+      "timestamp": "2026-09-12T11:00:00-03:00",
+      "presence": null,
+      "ac_on": true,
+      "empty_minutes": null,
+      "expected": "verificar_sensor"
+    }
+  ]
+}
