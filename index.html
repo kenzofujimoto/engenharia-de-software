@@ -4,58 +4,140 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="PoC Quarto Inteligente — alertas operacionais com contexto e confirmação humana." />
+  <meta name="theme-color" content="#0b1614" />
   <title>Quarto Inteligente — Operação hospitalar+</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
   <link rel="stylesheet" href="/hackinova.css" />
 </head>
 <body>
-  <div class="scope-strip">POC • DADOS SINTÉTICOS • NÃO CONTROLA EQUIPAMENTOS • SEM DADOS DE PACIENTES</div>
+  <a class="skip-link" href="#main">Ir para o conteúdo</a>
+
+  <div class="scope-strip">
+    <div class="scope-strip__inner">
+      <span class="scope-label">Ambiente de demonstração</span>
+      <span class="scope-copy">dados sintéticos / sem controle de equipamentos / sem dados de pacientes</span>
+    </div>
+  </div>
+
   <header class="topbar">
-    <div><div class="eyebrow">Hack Inova Health AI · Desafio 7</div><h1>Quarto Inteligente</h1><p class="subtitle">Contexto antes do alerta. Pessoa antes da ação.</p></div>
-    <div class="system-pill" id="systemPill"><span></span> verificando API</div>
+    <div class="brand-lockup">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M5 5h12v12H5zM23 5h12v12H23zM5 23h12v12H5z" />
+          <path class="brand-mark__accent" d="M23 23h12v12H23z" />
+        </svg>
+      </div>
+      <div>
+        <div class="eyebrow">Hack Inova Health AI · Desafio 7</div>
+        <h1>Quarto <span>Inteligente</span></h1>
+        <p class="subtitle">Contexto antes do alerta. Pessoa antes da ação.</p>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="header-status__label">Sistema</div>
+      <div class="system-pill" id="systemPill"><span></span> verificando API</div>
+    </div>
   </header>
-  <main class="shell">
-    <section class="hero-grid">
+
+  <main class="shell" id="main">
+    <section class="hero-grid" aria-labelledby="hero-title">
       <article class="hero-copy panel">
-        <div class="eyebrow">Operação hospitalar+</div><h2>Transforme telemetria em uma fila de trabalho explicável.</h2>
-        <p>O painel cruza presença, estado do sensor e cargas monitoradas. Ele só cria uma ocorrência quando existe contexto suficiente e sempre exige confirmação humana antes de qualquer encaminhamento operacional.</p>
-        <div class="hero-actions"><button class="btn primary" id="runDemo">Executar roteiro da demo</button><button class="btn ghost" id="resetDemo">Limpar sessão</button></div>
+        <div class="hero-copy__topline">
+          <span class="eyebrow eyebrow--inverse">Operação hospitalar+</span>
+          <span class="hero-index">07 / POC</span>
+        </div>
+        <h2 id="hero-title">Telemetria vira decisão só quando existe contexto.</h2>
+        <p>Presença, saúde do sensor e consumo são avaliados juntos. O sistema filtra ruído, explica o motivo de cada ocorrência e mantém uma pessoa responsável pelo próximo passo.</p>
+        <div class="hero-actions">
+          <button class="btn primary" id="runDemo">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 5 8 5-8 5V5Z" /></svg>
+            Executar roteiro da demo
+          </button>
+          <button class="btn ghost ghost--dark" id="resetDemo">Limpar sessão</button>
+        </div>
+        <div class="hero-meta" aria-label="Princípios da solução">
+          <div><span>Decisão</span><strong>Explicável</strong></div>
+          <div><span>Exceção</span><strong>Humana</strong></div>
+          <div><span>Escopo</span><strong>Sintético</strong></div>
+        </div>
       </article>
-      <article class="journey panel">
-        <div class="journey-step"><b>1</b><span><strong>Entrada</strong>Evento sintético do quarto</span></div><div class="journey-arrow">→</div>
-        <div class="journey-step"><b>2</b><span><strong>Decisão</strong>Presença + carga + saúde do sensor</span></div><div class="journey-arrow">→</div>
-        <div class="journey-step"><b>3</b><span><strong>Ação</strong>OK, alerta ou revisão</span></div><div class="journey-arrow">→</div>
-        <div class="journey-step"><b>4</b><span><strong>Saída</strong>Confirmação humana + métrica</span></div>
+
+      <article class="journey panel" aria-label="Protocolo de decisão">
+        <div class="journey-head">
+          <div>
+            <div class="eyebrow">Protocolo operacional</div>
+            <h2>Da leitura à confirmação</h2>
+          </div>
+          <span class="protocol-tag">human-in-the-loop</span>
+        </div>
+        <div class="journey-flow">
+          <div class="journey-step"><b>01</b><span><strong>Entrada</strong>Evento sintético do quarto</span></div>
+          <div class="journey-arrow" aria-hidden="true">→</div>
+          <div class="journey-step"><b>02</b><span><strong>Contexto</strong>Presença + carga + sensor</span></div>
+          <div class="journey-arrow" aria-hidden="true">→</div>
+          <div class="journey-step"><b>03</b><span><strong>Decisão</strong>Normal, alerta ou revisão</span></div>
+          <div class="journey-arrow" aria-hidden="true">→</div>
+          <div class="journey-step"><b>04</b><span><strong>Confirmação</strong>Pessoa registra o desfecho</span></div>
+        </div>
+        <div class="safety-note"><span class="safety-note__mark"></span><strong>Regra de segurança</strong> contexto incompleto ou exceção nunca vira automação: vai para revisão.</div>
       </article>
     </section>
-    <section class="metrics" aria-label="Métricas da sessão">
-      <article class="metric"><span>Ocorrências abertas</span><strong id="mOpen">0</strong><small>ALERT + REVIEW pendentes</small></article>
+
+    <section class="metrics panel" aria-label="Métricas da sessão">
+      <article class="metric"><span>Ocorrências abertas</span><strong id="mOpen">0</strong><small>pendentes de confirmação</small></article>
       <article class="metric"><span>Alertas úteis</span><strong id="mUseful">0</strong><small>confirmados pela operação</small></article>
       <article class="metric"><span>Falsos alertas</span><strong id="mFalse">0</strong><small>marcados nesta sessão</small></article>
       <article class="metric"><span>Tempo até confirmação</span><strong id="mTime">—</strong><small>média da sessão</small></article>
     </section>
+
     <section class="workspace">
       <div class="column-main">
-        <div class="section-head"><div><div class="eyebrow">Situação agora</div><h2>Quartos monitorados</h2></div><div class="legend"><span class="dot ok"></span>normal <span class="dot alert"></span>alerta <span class="dot review"></span>revisão</div></div>
+        <div class="section-head">
+          <div><div class="eyebrow">Situação agora</div><h2>Quartos monitorados</h2></div>
+          <div class="legend" aria-label="Legenda de estados"><span class="dot ok"></span>normal <span class="dot alert"></span>alerta <span class="dot review"></span>revisão</div>
+        </div>
         <div class="room-grid" id="roomGrid"></div>
-        <div class="section-head timeline-head"><div><div class="eyebrow">Rastreabilidade</div><h2>Linha do tempo</h2></div></div>
+
+        <div class="section-head timeline-head"><div><div class="eyebrow">Rastreabilidade</div><h2>Linha do tempo</h2></div><span class="section-code">event stream</span></div>
         <div class="timeline panel" id="timeline"><div class="empty">Nenhum evento nesta sessão.</div></div>
       </div>
+
       <aside class="column-side">
-        <section class="panel queue-panel"><div class="section-head compact"><div><div class="eyebrow">Fila operacional</div><h2>Precisa de pessoa</h2></div><span class="counter" id="queueCount">0</span></div><div id="alertQueue" class="queue"><div class="empty">Sem pendências.</div></div></section>
+        <section class="panel queue-panel">
+          <div class="section-head compact">
+            <div><div class="eyebrow eyebrow--inverse">Fila operacional</div><h2>Precisa de pessoa</h2></div>
+            <span class="counter" id="queueCount">0</span>
+          </div>
+          <p class="queue-intro">Só chegam aqui eventos que exigem confirmação ou contexto adicional.</p>
+          <div id="alertQueue" class="queue"><div class="empty">Sem pendências.</div></div>
+        </section>
+
         <section class="panel generator">
-          <div class="eyebrow">Gerador de eventos</div><h2>Simular uma leitura</h2>
+          <div class="generator-head"><div><div class="eyebrow">Gerador de eventos</div><h2>Simular uma leitura</h2></div><span class="section-code">synthetic</span></div>
           <form id="eventForm">
-            <label>Quarto<input name="room_id" value="Q-207" maxlength="12" /></label>
-            <div class="form-row"><label>Presença<select name="occupied"><option value="false">Vazio</option><option value="true">Ocupado</option><option value="null">Desconhecida</option></select></label><label>Sensor<select name="sensor_status"><option value="online">Online</option><option value="offline">Indisponível</option><option value="degraded">Degradado</option></select></label></div>
+            <label>Quarto<input name="room_id" value="Q-207" maxlength="12" autocomplete="off" /></label>
+            <div class="form-row">
+              <label>Presença<select name="occupied"><option value="false">Vazio</option><option value="true">Ocupado</option><option value="null">Desconhecida</option></select></label>
+              <label>Sensor<select name="sensor_status"><option value="online">Online</option><option value="offline">Indisponível</option><option value="degraded">Degradado</option></select></label>
+            </div>
             <div class="checks"><label><input type="checkbox" name="hvac_on" /> Ar ligado</label><label><input type="checkbox" name="light_on" /> Luz ligada</label></div>
-            <label>Consumo observado (W)<input type="number" name="power_w" min="0" value="80" /></label>
+            <label>Consumo observado <span class="unit">W</span><input type="number" name="power_w" min="0" value="80" /></label>
             <button class="btn primary full" type="submit">Enviar evento sintético</button>
-          </form><p class="form-note">O simulador não possui campos de nome, prontuário ou dado clínico.</p>
+          </form>
+          <p class="form-note">Sem nome, prontuário ou qualquer dado clínico.</p>
         </section>
       </aside>
     </section>
   </main>
-  <footer><span>Hack Inova Health AI 2026 · PoC para gestão e operação</span><span>Regra de segurança: exceção ou contexto incompleto → pessoa.</span></footer>
+
+  <footer>
+    <span>Hack Inova Health AI 2026 · Desafio 7</span>
+    <span class="footer-rule">exceção / contexto incompleto → pessoa</span>
+  </footer>
   <script src="/hackinova.js" defer></script>
 </body>
 </html>
