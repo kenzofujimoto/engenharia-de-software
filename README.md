@@ -108,6 +108,9 @@ Os testes cobrem os três casos oficiais, limiar de 119/120 minutos, dados ausen
 ## Documentação
 
 - `docs/ARQUITETURA-SEM-ORACLE.md`
+- `docs/ENQUADRAMENTO-DA-DOR.md`
+- `docs/CONTRATO-E-ESTADOS.md`
+- `docs/CHECKLIST-ENTREGA.md`
 - `docs/PESQUISA-E-HIPOTESES.md`
 - `docs/CRITICA-ADVERSARIAL.md`
 - `docs/PITCH.md`
